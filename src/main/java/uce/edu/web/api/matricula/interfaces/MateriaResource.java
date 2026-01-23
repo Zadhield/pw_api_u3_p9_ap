@@ -10,6 +10,9 @@ import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.Produces;
 import uce.edu.web.api.matricula.application.MateriaService;
 import uce.edu.web.api.matricula.domain.Materia;
 
@@ -20,37 +23,41 @@ public class MateriaResource {
     private MateriaService materiaService;
 
     @GET
-    @Path("/todos")
+    @Path("")
+    @Produces(MediaType.APPLICATION_JSON)
     public List<Materia> listarTodos() {
         return this.materiaService.listarTodos();
     }
 
     @GET
-    @Path("/consultarPorId/{id}")
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_XML)
     public Materia consultarPorId(@PathParam("id") Integer id) {
         return this.materiaService.consultarPorId(id);
     }
 
     @POST
-    @Path("/crear")
-    public void guardar(Materia materia) {
+    @Path("")
+    public Response guardar(Materia materia) {
         this.materiaService.crear(materia);
+        return Response.status(Response.Status.CREATED).entity(materia).build();
     }
 
     @PUT
-    @Path("/actualizar/{id}")
+    @Path("/{id}")
     public void actualizar(@PathParam("id") Integer id, Materia materia) {
         this.materiaService.actualizar(id, materia);
     }
 
     @PATCH
-    @Path("/actualizarParcial/{id}")
-    public void actualizarParcial(@PathParam("id") Integer id, Materia materia) {
+    @Path("/{id}")
+    public Response actualizarParcial(@PathParam("id") Integer id, Materia materia) {
         this.materiaService.actualizarParcial(id, materia);
+        return Response.status(209).entity(null).build();
     }
 
     @DELETE
-    @Path("/borrar/{id}")
+    @Path("/{id}")
     public void borrar(@PathParam("id") Integer id) {
         this.materiaService.eliminar(id);
     }
