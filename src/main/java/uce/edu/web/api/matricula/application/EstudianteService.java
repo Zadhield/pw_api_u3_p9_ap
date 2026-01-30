@@ -36,27 +36,39 @@ public class EstudianteService {
     }
 
     @Transactional
-     public void actualizar(Integer id, EstudianteRepresentation est) {
-        Estudiante estu = this.mapperToEstudiante(this.consultarPorId(id));
-        estu.setApellido(est.getApellido());
-        estu.setNombre(est.getNombre());
-        estu.setFechaNacimiento(est.getFechaNacimiento());
-        // Se actualiza automáticamente por dirty checking
+    public void actualizar(Integer id, EstudianteRepresentation est) {
+        Estudiante estuDB = this.estudianteRepository.findById(id.longValue());
+
+        if (estuDB != null) {
+            estuDB.setNombre(est.getNombre());
+            estuDB.setApellido(est.getApellido());
+            estuDB.setFechaNacimiento(est.getFechaNacimiento());
+            estuDB.setProvincia(est.getProvincia());
+            estuDB.setGenero(est.getGenero());
+        }
     }
 
     @Transactional
-    public void actualizarParcial(Integer id, EstudianteRepresentation est) {
-        Estudiante estu = this.mapperToEstudiante(this.consultarPorId(id));
-        if (est.getNombre() != null) {
-            estu.setNombre(est.getNombre());
-        }
+    public void actualizarParcial(Integer id, EstudianteRepresentation estDto) {
+        Estudiante estuDB = this.estudianteRepository.findById(id.longValue());
 
-        if (est.getApellido() != null) {
-            estu.setApellido(est.getApellido());
-        }
+        if (estuDB != null) {
 
-        if (est.getFechaNacimiento() != null) {
-            estu.setFechaNacimiento(est.getFechaNacimiento());
+            if (estDto.getNombre() != null) {
+                estuDB.setNombre(estDto.getNombre());
+            }
+
+            if (estDto.getApellido() != null) {
+                estuDB.setApellido(estDto.getApellido());
+            }
+
+            if (estDto.getFechaNacimiento() != null) {
+                estuDB.setFechaNacimiento(estDto.getFechaNacimiento());
+            }
+
+            if (estDto.getProvincia() != null) {
+                estuDB.setProvincia(estDto.getProvincia());
+            }
         }
     }
 
@@ -71,7 +83,8 @@ public class EstudianteService {
 
     public List<EstudianteRepresentation> buscarPorProvinciaGenero(String provincia, String genero) {
         List<EstudianteRepresentation> list = new ArrayList<>();
-        for (Estudiante estu : this.estudianteRepository.find("provincia = ?1 and genero = ?2", provincia, genero).list()) {
+        for (Estudiante estu : this.estudianteRepository.find("provincia = ?1 and genero = ?2", provincia, genero)
+                .list()) {
             list.add(this.mapperToER(estu));
         }
         return list;
@@ -89,6 +102,7 @@ public class EstudianteService {
 
         return estuR;
     }
+
     private Estudiante mapperToEstudiante(EstudianteRepresentation est) {
         Estudiante estuR = new Estudiante();
         estuR.setId(est.getId());
