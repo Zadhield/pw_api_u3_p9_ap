@@ -1,6 +1,7 @@
 package uce.edu.web.api.matricula.application.representation;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class EstudianteRepresentation {
 
@@ -58,4 +59,15 @@ public class EstudianteRepresentation {
     public void setGenero(String genero) {
         this.genero = genero;
     }
+
+    private List<LinkDto> links;
+
+    public List<LinkDto> getLinks() {
+        return links;
+    }
+
+    public void setLinks(List<LinkDto> links) {
+        this.links = links;
+    }
+
 }
